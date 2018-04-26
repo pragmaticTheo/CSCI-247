@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -14,7 +13,7 @@ bool OnlyOneBitSet(int);
 bool OnlyOneBitSetInEvenPosition(int);
 int ModWithoutUsingModOperator(int numerator, int denominator);
 int SwapNibbles(int);
-int NumberofOperationsRequired(int);
+int NumberOfOperationsRequired(int);
 
 // This basic testing interface must be provided with three command line arguments: 
 // The first number (testInteger) is processed by every function written for the lab.
@@ -43,6 +42,7 @@ int main(int argc, char* argv[])
 	fputs(OnlyOneBitSetInEvenPosition(testInteger) ? "(True)\n" : "(False)\n", stdout);
 	printf("The remainder of the given numerator and base 2 denominator is: %d\n", ModWithoutUsingModOperator(testInteger, testInteger2));
 	printf("Swapping the nibbles of the number %d yields the number: %d\n", testInteger, SwapNibbles(testInteger));
+	printf("The amount of iterations required to reduce the preset counter to 1, is: %d\n", NumberOfOperationsRequired(testInteger));
 }
 
 // Return the number of set  bits in an integer.
@@ -135,6 +135,7 @@ int ModWithoutUsingModOperator(int numerator, int denominator)
 {
 	// Get first 'n' bits of the numerator, based upon the number of leading zeros in the denominator.
 	int trailingZeroes = 0;
+	// Count the amount of leading zeros in the denominator.
 	for(int i = 0; i < 32; i++)
 	{
 		if(!(denominator & 0x01))
@@ -146,11 +147,12 @@ int ModWithoutUsingModOperator(int numerator, int denominator)
 			break;
 		}
 	}
-	int isolatingMask = 0;
-	for(int i = 0; i < trailingZeroes; i++)
+	// Make a bit mask for the number of trailing zeros (places).
+	int isolatingMask = 0;	for(int i = 0; i < trailingZeroes; i++)
 	{
-		isolatingMask = isolatingMask | 1 << i;
+		isolatingMask |= 1 << i;
 	}	
+	// Isolate this number of bits in the numerator, which happens to be the remainder.
 	numerator &= isolatingMask;
 	return numerator;
 }
@@ -198,16 +200,22 @@ int SwapNibbles(int var)
 	return var;
 }
 
-
-
-
-
-
-
-
-
-
-
+// Counter Game - If the counter passed in is a power of 2, reduce the counter.
+int NumberOfOperationsRequired(int presetCounter)
+{
+	int loopCount = 0;
+	while(presetCounter > 1)
+	{
+		// If it is the case that presetCounter is a power of 2...
+		int result = (presetCounter && (presetCounter & (presetCounter - 1)) == 0);
+		if(result)
+		{
+			presetCounter >>= 1; 
+		}
+		loopCount++;
+	}
+	return loopCount;
+}
 
 
 
