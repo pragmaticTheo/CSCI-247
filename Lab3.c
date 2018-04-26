@@ -207,10 +207,21 @@ int NumberOfOperationsRequired(int presetCounter)
 	while(presetCounter > 1)
 	{
 		// If it is the case that presetCounter is a power of 2...
-		int result = (presetCounter && (presetCounter & (presetCounter - 1)) == 0);
-		if(result)
+		if(presetCounter && (presetCounter & (presetCounter - 1)) == 0)
 		{
 			presetCounter >>= 1; 
+		}
+		// If this is not the case, then just subtract the largest power of 2 lower than presetCounter.
+		else{
+			for(int i = 31; i >= 0; i--)
+			{
+				// If the bit at this position is set, clear it.
+				if(presetCounter & (1 << i))
+				{
+					presetCounter &= ~(1 << i);
+					break;
+				}
+			}
 		}
 		loopCount++;
 	}
