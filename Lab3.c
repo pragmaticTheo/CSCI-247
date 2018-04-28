@@ -1,10 +1,17 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <stdbool.h>
-
-// NOTE TO SELF: Everything appears to be working properly up through Task 7 ("Swap nibbles within each byte of an integer").
-// Might be worth investigating the behavior of "CountSetBits" when negative numbers are provided.
+/*
+	CSCI 247 - Spring 2018
+	Filename: Lab3.c
+	A Series of Wisely Crafted Bitwise Functions by Brandon Chavez.
+	Rated 'B' for "Big and juicy."
+	
+	This program is an amalgamation of functions which serve as exercises in bit manipulation.
+	Please pass in the necessary command line arguments as documented below.
+*/
 
 int CountSetBits(unsigned int var);
 int identifyUniqueInteger(int arrayCount, int* intArray);
@@ -16,33 +23,35 @@ int SwapNibbles(int);
 int NumberOfOperationsRequired(int);
 
 // This basic testing interface must be provided with three command line arguments: 
-// The first number (testInteger) is processed by every function written for the lab.
-// The second number (testInteger2) serves as the denominator for the "ModulusWithoutUsingModOperator" function. 
-// testInteger2 *MUST* have only one set bit in order to guarantee that the function works correctly.
-// The third argument is the array that you wish to use to test the "identifyUniqueInteger" function.
+// The first argument is an integer (testInteger), and is processed by every function written for the lab.
+// The second number is an integer (testInteger2) which serves as the denominator for the "ModulusWithoutUsingModOperator" function. 
+// testInteger2 *MUST* have only one set bit (be a power of 2) in order to guarantee that the function works correctly.
+// The fourth argument is a list of elements to place in an array (testArray), which is passed to the "identifyUniqueInteger" function.
 
 int main(int argc, char* argv[])
 {
 	int testInteger = 0;
 	int testInteger2 = 0;
+	int testArray[argc - 3];
 	sscanf(argv[1], "%d", &testInteger);
 	sscanf(argv[2], "%d", &testInteger2);
+	for(int i = 3; i < argc; i++)
+	{
+		testArray[i - 3] = atoi(argv[i]);
+	}
 	
-	// Subject Arrays for testing the "identifyUniqueInteger" function. This can be chosen by changing 
-	int intArray1[11] = {1, 2, 1, 2, 5, 5, 3, 6, 3, 6, 128000};
-	int intArray2[9] = {4, 3, 2, 35, 3, 2, 35, 102, 4};
-	int intArray3[5] = {546, 647, 546, 647, 302}; 
-	
-	printf("The total amount of set bits in the number given is: %d\n", CountSetBits(testInteger));
-	printf("The unique number in the set provided is: %d\n", identifyUniqueInteger((sizeof(intArray3)/sizeof(int)), intArray3));
+	printf("====================================================\n");
+	printf("The total amount of set bits in testInteger is: %d\n", CountSetBits(testInteger));
+	printf("The unique number in the array provided is: %d\n", identifyUniqueInteger((sizeof(testArray)/sizeof(int)), testArray));
 	printf("Reversing all bits, including the sign bit, of %d yields the number: %d\n", testInteger, ReverseBits(testInteger));
-	printf("Is there only one bit set in this integer...?: ");
+	printf("Is there only one bit set in testInteger...?: ");
 	fputs(OnlyOneBitSet(testInteger) ? "(True) Yeah, there is.\n" : "(False) Oh my, no.\n", stdout);	
-	printf("Is this one bit at an even or an odd position...?: ");
+	printf("Is this one bit at an even or an odd position...?: \n");
 	fputs(OnlyOneBitSetInEvenPosition(testInteger) ? "(True)\n" : "(False)\n", stdout);
-	printf("The remainder of the given numerator and base 2 denominator is: %d\n", ModWithoutUsingModOperator(testInteger, testInteger2));
+	printf("The remainder of the given numerator (testInteger) \nand base 2 denominator (testInteger2) is: %d\n", ModWithoutUsingModOperator(testInteger, testInteger2));
 	printf("Swapping the nibbles of the number %d yields the number: %d\n", testInteger, SwapNibbles(testInteger));
-	printf("The amount of iterations required to reduce the preset counter to 1, is: %d\n", NumberOfOperationsRequired(testInteger));
+	printf("The amount of iterations required to reduce testInteger to 1, is: %d\n", NumberOfOperationsRequired(testInteger));
+	printf("====================================================\n");
 }
 
 // Return the number of set  bits in an integer.
@@ -200,8 +209,15 @@ int SwapNibbles(int var)
 	return var;
 }
 
-// Counter Game - If the counter passed in is a power of 2, reduce the counter.
+// The optimized version of Counter Game. The original function I devised is shown below.
 int NumberOfOperationsRequired(int presetCounter)
+{
+		return CountSetBits(presetCounter - 1); 
+}
+
+// The original version of Counter Game which I wrote before taking on task 9 of the lab. 
+// Only included in case you should decide to test it for any reason.
+int noorUnoptimized(int presetCounter)
 {
 	int loopCount = 0;
 	while(presetCounter > 1)
@@ -227,25 +243,6 @@ int NumberOfOperationsRequired(int presetCounter)
 	}
 	return loopCount;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
