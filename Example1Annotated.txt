@@ -1,0 +1,15 @@
+0x00000000004004d6 <+0>:	push   %rbp - Write current base pointer to the stack so it can be restored later.
+0x00000000004004d7 <+1>:	mov    %rsp,%rbp - Copy stack pointer from %rsp into %rbp (base pointer register).
+=> 0x00000000004004da <+4>:	movl   $0x0,-0x8(%rbp) - x = 0;
+0x00000000004004e1 <+11>:	movl   $0x0,-0x4(%rbp) - y = 0;
+0x00000000004004e8 <+18>:	mov    -0x8(%rbp),%eax - copy value of x into eax register. (Register Indirect Indexed Addressing Mode).
+0x00000000004004eb <+21>:	add    %eax,-0x4(%rbp) - y = x + y
+0x00000000004004ee <+24>:	mov    -0x4(%rbp),%eax - copy value of y into eax register.
+0x00000000004004f1 <+27>:	add    %eax,-0x8(%rbp) - x = y + x
+0x00000000004004f4 <+30>:	mov    -0x8(%rbp),%eax - move value of x into eax register.
+0x00000000004004f7 <+33>:	lea    0x1(%rax),%edx - sets %edx register to 1.
+0x00000000004004fa <+36>:	mov    %edx,-0x8(%rbp) - x + 1;
+0x00000000004004fd <+39>:	add    %eax,-0x4(%rbp) - Add 0 to y.
+0x0000000000400500 <+42>:	mov    $0x0,%eax - clear eax register.
+0x0000000000400505 <+47>:	pop    %rbp - restore old value of base pointer.
+0x0000000000400506 <+48>:	retq  - return from main function.
